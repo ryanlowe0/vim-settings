@@ -1,0 +1,8 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =6
+let g:netrw_dirhist_1='/home/rlowe/catapult/app/views/catalog/landing'
+let g:netrw_dirhist_2='/home/rlowe/bookserver/lib'
+let g:netrw_dirhist_3='/home/catapult/dev/catapult/shared/bundle/ruby/1.9.1/gems/sprockets-2.2.2'
+let g:netrw_dirhist_4='/home/catapult/dev/catapult/shared/bundle/ruby/1.9.1/gems/sprockets-2.2.2/lib'
+let g:netrw_dirhist_5='/home/catapult/dev/catapult/shared/bundle/ruby/1.9.1/gems/sprockets-2.2.2/lib/sprockets'
+let g:netrw_dirhist_6='/home/rlowe/experimental/coffee_games'

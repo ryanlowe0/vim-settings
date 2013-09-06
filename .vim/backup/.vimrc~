@@ -1,0 +1,118 @@
+set expandtab
+set textwidth=79
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set autoindent
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+set hidden
+set backspace=indent,eol,start
+set number
+set backup 
+set backupdir=~/.vim/backup 
+
+set wildmenu
+set wildmode=list:longest,full
+
+" searches default to global replace - /g re-mapped to "first occurrence"
+set gdefault
+
+" after pressing F2, paste without requiring :set no[sa]i !!
+set pastetoggle=<F2>
+
+filetype on
+filetype plugin on
+filetype indent on
+
+set list
+set listchars=tab:\..   " highlight tab characters
+
+:syntax on
+
+:colorscheme myslate
+
+" make ; = : so no shift key required!
+nnoremap ; :
+
+" use PERL-style regex by default
+nnoremap / /\v
+vnoremap / /\v
+nnoremap ;/ :%s/\v
+
+nnoremap j gj
+nnoremap k gk
+
+" clear search with ./
+nmap <silent> ./ :nohlsearch<cr>
+
+" strip trailing whitespace
+nnoremap \W :%s/\s\+$//<cr>:let @/=''<cr>
+
+
+" fix menu to show matches as you type rather than auto-selecting the 1st
+set completeopt=longest,menuone
+
+" tab completion via pydiction
+let g:pydiction_location = '/home/rlowe/pydiction/complete-dict'
+" TODO: make post dot. tab show matches in the previous namespace
+
+
+" python setup
+:py from vim import *
+:py buf = current.buffer 
+
+
+
+" no shift required
+nmap ;qq :q!
+
+" insert mode undo/redo
+imap <c-z> <esc>ui
+imap <c-r> <esc><c-r>i
+
+" auto-set matching with cursor in middle
+inoremap ( ()<Esc>i
+inoremap [ []<Esc>i
+inoremap { {}<Esc>i
+inoremap " ""<Esc>i
+" allow single ' but put cursor between if typing 2 in a row
+inoremap '' ''<Esc>i
+
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+" need to figure out how to use this - mouse enabling in term!
+" problem is, how to go back to normal term selecting - toogle
+" func below not working..
+"set mouse=a
+"fun! s:ToggleMouse()
+"    if !exists("s:old_mouse")
+"        let s:old_mouse = "a"
+"    endif
+"
+"    if &mouse == ""
+"        let &mouse = s:old_mouse
+"        echo "Mouse is for Vim (" . &mouse . ")"
+"    else
+"        let s:old_mouse = &mouse
+"        let &mouse=""
+"        echo "Mouse is for terminal"
+"    endif
+"endfunction
+
+
+
+" CRAZY MAP EXPERIMENTS
+" swap case of current word, move to next
+nmap K vwh~w
+" add current line length num dashes below it
+imap -- <esc>yypVr-i
+nmap -- yypVr-
+
+
