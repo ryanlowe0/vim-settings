@@ -23,12 +23,12 @@ set gdefault
 
 
 " Auto reload .vimrc
-autocmd! bufwritepost .vimrc source %
+au! bufwritepost .vimrc source %
 
 " Restore cursor position when re-entering a file
 augroup resCur
-  autocmd!
-  autocmd BufReadPost * call setpos(".", getpos("'\""))
+  au!
+  au BufReadPost * call setpos(".", getpos("'\""))
 augroup END
 
 
@@ -59,22 +59,18 @@ nmap P "_Dp`.<down>
 " paste buffer in command / search
 cmap <leader>p <c-r>"
 
+" add spaces in normal mode
 nmap <space> i<space><esc>
 
-" save and quit from insert mode too
+" save, quit, both in normal and insert mode
 inoremap ZZ <esc>:wq<cr>
 inoremap WW <esc>:w<cr>a
 inoremap QQ <esc>:q!<cr>
 nnoremap WW :w<cr>
 nnoremap QQ :q!<cr>
-nnoremap s * 
-nnoremap S # 
-nmap # ]#
-vmap # ]#
-nmap * [#
-vmap * [#
 
-
+" BUFFERS
+"
 " list buffers and set up for selecting the buffer number
 nnoremap buf :buffers<cr>:buffer<space>
 " make switch to previous buffer <c-^> cycle rather than toggle
@@ -91,12 +87,11 @@ nmap ; :
 " use PERL-style regex by default
 nnoremap / /\v
 nnoremap ;/ :%s;\v;;<left><left>
-cmap ;\ \(\)<left><left>
 
 " clear search highlight
 nmap <silent> ./ :nohlsearch<cr>
 
-
+" sort
 vnoremap <leader>s :sort<cr>
 
 nnoremap j gj
@@ -128,14 +123,19 @@ inoremap ''' '''
 inoremap """ """
 
 
-" Default commenting with #
-
 map  ]#   :call CommentSelection()<CR>
 vmap ]#   :call CommentSelection()<CR>
 map  [#   :call UncommentSelection()<CR>
 vmap [#   :call UncommentSelection()<CR>
 
+" Remap # and * to comment and uncomment (original functions mapped to S and s)
 
+nnoremap s * 
+nnoremap S # 
+nmap # ]#
+vmap # ]#
+nmap * [#
+vmap * [#
 
 " swap comment with adjacent line
 nmap ]<down> [#<down>]#
@@ -146,8 +146,6 @@ nnoremap '' ciw'<esc>pa'<esc>
 nnoremap "" ciw"<esc>pa"<esc>
 nnoremap d' ma?'<cr>x/'<cr>x\|:nohlsearch<cr>`a
 nnoremap d" ma?"<cr>x/"<cr>x\|:nohlsearch<cr>`a
-" nnoremap '' ?^.*' ? ciw'<esc>pa'<esc> : ma?'<cr>x/'<cr>x\|:nohlsearch<cr>`a
-" nnoremap '' ?^.*' ? 'ciw\'<lt>esc>pa\'<lt>esc>' : 'ma?\'<lt>cr>x/\'<lt>cr>x\|:nohlsearch<lt>cr>`a'
 
 nnoremap 1<right> x$p
 nnoremap 2<right> 2x$p
@@ -165,6 +163,23 @@ nmap ]= V]e=
 inoremap !! <esc>:r!
 nnoremap @ :Cmd<space>
 vnoremap @ :Cmd<space>
+
+
+nnoremap ! q:i
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Coffeescript
+au BufNewFile,BufRead *.coffee set filetype=coffee
+
+" auto-compile!
+func! g:CompileCoffee()
+    silent !coffee -c %
+endfunc
+au BufWritePost *.coffee call g:CompileCoffee()
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" python stuff
 
 " calls cmd.py
 func! CmdWithMeta(arg)
@@ -187,29 +202,6 @@ endfunc
 command! -nargs=1 Cmd call CmdWithMeta(<q-args>)
 " command! -nargs=1 Cmd call WithCursorLine('CmdWithMeta', <q-args>) 
 
-
-nnoremap ! q:i
-
-autocmd BufNewFile,BufRead *.txt set filetype=txt
-autocmd BufNewFile,BufRead *.opf set filetype=xml
-autocmd BufNewFile,BufRead *.ncx set filetype=xml
-autocmd BufNewFile,BufRead *.cu set filetype=cuda
-autocmd BufNewFile,BufRead *.haml set filetype=haml
-"autocmd BufNewFile,BufRead *.scss set filetype=sass
-autocmd BufNewFile,BufRead *.conf set filetype=conf
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Coffeescript
-autocmd BufNewFile,BufRead *.coffee set filetype=coffee
-
-func! g:CompileCoffee()
-    silent !coffee -c %
-endfunc
-autocmd BufWritePost *.coffee call g:CompileCoffee()
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" python stuff
-
 " tab completion via prediction
 let g:pydiction_location = '/home/rlowe/pydiction/complete-dict'
 " TODO: make post dot. Tab show matches in the previous name space
@@ -225,7 +217,7 @@ func! g:ChmodOnWrite()
     silent !chmod 775 %
     set autoread<       " restore to global setting
 endfunc
-autocmd BufWritePost *.py call g:ChmodOnWrite()
+au BufWritePost *.py call g:ChmodOnWrite()
 
 
 " add shebang line
@@ -236,26 +228,6 @@ au BufEnter *.py map <buffer> <c-e> :w<cr>:!/usr/bin/env python -u % <cr>
 au BufEnter *.py imap <buffer> <c-e> <esc>:w<cr>:!/usr/bin/env python -u % <cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
-" NOTES
-"
-"
-" [[ and ]] go back and forward to python def/class
-" { and } go back and forward to blank lines
-" ]P pastes at current indent level
-" Gd goto def (actually first word match)
-" * and # goto next/pref occurrence of word under cursor
-" ]> ]< indent/decent block of code (from plug-in)
-" ]# [# comment/uncomment vis highlighted code (from plug-in)
-" ]D ]c highlight current func/class (from plugin)
-" ]v highlight current block (from plugin)
-" gg and G goto beginning/end of file
-"
-"
-"
-"
-
 
 
 function! s:ExecuteInShell(command)
@@ -348,6 +320,15 @@ function! TextEnableCodeSnip(filetype, start, end, textSnipHl) abort
   \ start="'.a:start.'" end="'.a:end.'"
   \ contains=@'.group
 endfunction
+
+
+au BufNewFile,BufRead *.txt set filetype=txt
+au BufNewFile,BufRead *.opf set filetype=xml
+au BufNewFile,BufRead *.ncx set filetype=xml
+au BufNewFile,BufRead *.cu set filetype=cuda
+au BufNewFile,BufRead *.haml set filetype=haml
+"au BufNewFile,BufRead *.scss set filetype=sass
+au BufNewFile,BufRead *.conf set filetype=conf
 
 
 au BufEnter *.html set tabstop=2 | set softtabstop=2 | set shiftwidth=2
